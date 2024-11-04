@@ -6,16 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 
-@Entity(name = "tarefas")
+@Entity
+@Table(name = "tarefas")
 public class Tarefa {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String nome;
@@ -27,7 +30,11 @@ public class Tarefa {
 
     private int prioridade;
 
-    public boolean getRealizado() {
-        return this.realizado;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    public boolean estaRealizado() {
+        return realizado;
     }
 }
