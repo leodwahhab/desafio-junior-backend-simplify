@@ -1,0 +1,4 @@
+CREATE TYPE user_role AS ENUM ('ADMIN', 'USER');
+
+ALTER TABLE usuarios
+ADD COLUMN role user_role NOT NULL

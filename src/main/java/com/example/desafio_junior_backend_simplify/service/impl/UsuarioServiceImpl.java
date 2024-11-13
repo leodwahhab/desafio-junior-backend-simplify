@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Service
@@ -30,27 +31,27 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.save(usuario);
 
         return usuarioDTO;
-
     }
 
     public UsuarioDTO buscarPorEmail(String email) {
-        Usuario usuario = usuarioRepository.getUsuarioByEmail(email);
-
-        if(usuario == null)
-            return null;
-
-        return new UsuarioDTO(
-                usuario.getNome(),
-                usuario.getEmail(),
-                usuario.getSenha()
-        );
+//        Usuario usuario = usuarioRepository.findByEmail(email);
+//
+//        if(usuario == null)
+//            throw new NoSuchElementException();
+//
+//        return new UsuarioDTO(
+//                usuario.getNome(),
+//                usuario.getEmail(),
+//                usuario.getSenha()
+//        );
+        return null;
     }
 
-    public boolean validarLogin(String email, String senha) {
-        Usuario usuario = usuarioRepository.getUsuarioByEmail(email);
-
-        return Objects.nonNull(usuario) && usuario.getSenha().equals(senha);
-    }
+//    public boolean validarLogin(String email, String senha) {
+//        Usuario usuario = usuarioRepository.getUsuarioByEmail(email);
+//
+//        return Objects.nonNull(usuario) && usuario.getSenha().equals(senha);
+//    }
 
     private boolean usuarioNaoNulo(UsuarioDTO usuarioDTO) {
         return Objects.isNull(usuarioDTO) || Objects.isNull(usuarioDTO.nome()) || Objects.isNull(usuarioDTO.email()) || Objects.isNull(usuarioDTO.senha());

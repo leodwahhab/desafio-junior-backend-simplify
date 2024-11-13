@@ -27,17 +27,18 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     public TarefaDTO criarTarefa(String email, String senha, TarefaDTO tarefaDTO) {
-        if(usuarioService.validarLogin(email, senha)) {
-            Tarefa tarefa = new Tarefa();
-
-            BeanUtils.copyProperties(tarefaDTO, tarefa);
-
-            tarefaRepository.save(tarefa);
-        }
-        else
-            throw new IllegalArgumentException();
-
-        return tarefaDTO;
+//        if(usuarioService.validarLogin(email, senha)) {
+//            Tarefa tarefa = new Tarefa();
+//
+//            BeanUtils.copyProperties(tarefaDTO, tarefa);
+//
+//            tarefaRepository.save(tarefa);
+//        }
+//        else
+//            throw new IllegalArgumentException();
+//
+//        return tarefaDTO;
+        return null;
     }
 
 //    public TarefaDTO atualizarTarefa(Long id, TarefaDTO tarefaDTO) {

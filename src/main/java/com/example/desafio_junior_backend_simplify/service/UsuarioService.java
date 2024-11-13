@@ -8,6 +8,6 @@ public interface UsuarioService {
 
     UsuarioDTO buscarPorEmail(String email);
 
-    boolean validarLogin(String email, String senha);
+//    boolean validarLogin(String email, String senha);
 
 }
