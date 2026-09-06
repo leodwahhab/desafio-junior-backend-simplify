@@ -56,9 +56,6 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     private Tarefa findTarefaExistentePorId(Long id) {
-        return tarefaRepository.findById(id).orElseThrow(
-                // TODO tratar exceção
-                () -> new NoSuchElementException("Tarefa não registrada")
-        );
+        return tarefaRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

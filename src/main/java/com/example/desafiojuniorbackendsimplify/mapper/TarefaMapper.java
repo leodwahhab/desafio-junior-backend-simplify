@@ -20,7 +20,7 @@ public class TarefaMapper {
     }
 
     public List<TarefaResponseDto> toDtoLista(List<Tarefa> tarefas) {
-        return tarefas.stream().map(this::toDto).toList();
+        return tarefas.isEmpty() ? List.of() : tarefas.stream().map(this::toDto).toList();
     }
 
     public Tarefa toTarefa(TarefaRequestDto dto) {
