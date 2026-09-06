@@ -1,12 +1,16 @@
 package com.example.desafiojuniorbackendsimplify.model;
 
+import com.example.desafiojuniorbackendsimplify.enums.PrioridadeEnum;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Table(name = "tarefa")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,19 +25,5 @@ public class Tarefa {
     private boolean realizado = false;
 
     @Column(nullable = false)
-    private Prioridade prioridade;
-
-    @Getter
-    enum Prioridade {
-        BAIXA("Baixa"),
-        MEDIa("Média"),
-        ALTA("Alta");
-
-        private final String descricao;
-
-        Prioridade(String descricao) {
-            this.descricao = descricao;
-        }
-
-    }
+    private PrioridadeEnum prioridade;
 }
