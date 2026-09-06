@@ -30,4 +30,10 @@ public class TarefaController {
         return ResponseEntity.status(HttpStatus.OK).body(tarefaService.atualizarTarefa(id, tarefaRequestDto));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> excluirTarefa(@PathVariable Long id) {
+        tarefaService.excluirTarefa(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

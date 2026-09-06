@@ -38,10 +38,7 @@ public class TarefaServiceImpl implements TarefaService {
 
     @Override
     public Tarefa atualizarTarefa(Long id, TarefaRequestDto dto) {
-        Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(
-                // TODO tratar exceção
-                () -> new NoSuchElementException("Tarefa não registrada")
-        );
+        Tarefa tarefa = findTarefaExistentePorId(id);
 
         tarefa.setNome(dto.nome());
         tarefa.setDescricao(dto.descricao());
@@ -53,6 +50,15 @@ public class TarefaServiceImpl implements TarefaService {
 
     @Override
     public void excluirTarefa(Long id) {
+        Tarefa tarefa = findTarefaExistentePorId(id);
 
+        tarefaRepository.delete(tarefa);
+    }
+
+    private Tarefa findTarefaExistentePorId(Long id) {
+        return tarefaRepository.findById(id).orElseThrow(
+                // TODO tratar exceção
+                () -> new NoSuchElementException("Tarefa não registrada")
+        );
     }
 }
