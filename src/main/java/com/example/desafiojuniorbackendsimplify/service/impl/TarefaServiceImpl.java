@@ -9,6 +9,7 @@ import com.example.desafiojuniorbackendsimplify.service.TarefaService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class TarefaServiceImpl implements TarefaService {
@@ -36,8 +37,18 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     @Override
-    public Tarefa atualizarTarefa(TarefaRequestDto dto) {
-        return null;
+    public Tarefa atualizarTarefa(Long id, TarefaRequestDto dto) {
+        Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(
+                // TODO tratar exceção
+                () -> new NoSuchElementException("Tarefa não registrada")
+        );
+
+        tarefa.setNome(dto.nome());
+        tarefa.setDescricao(dto.descricao());
+        tarefa.setPrioridade(dto.prioridade());
+        tarefa.setRealizado(dto.realizado());
+
+        return tarefaRepository.save(tarefa);
     }
 
     @Override

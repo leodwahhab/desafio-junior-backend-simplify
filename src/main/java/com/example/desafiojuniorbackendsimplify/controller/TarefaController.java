@@ -24,4 +24,10 @@ public class TarefaController {
     public ResponseEntity<?> getTarefas() {
         return ResponseEntity.status(HttpStatus.OK).body(tarefaService.listarTarefas());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTarefa(@PathVariable Long id, @RequestBody TarefaRequestDto tarefaRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaService.atualizarTarefa(id, tarefaRequestDto));
+    }
+
 }

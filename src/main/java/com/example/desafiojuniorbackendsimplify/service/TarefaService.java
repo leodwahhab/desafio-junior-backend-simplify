@@ -11,7 +11,7 @@ public interface TarefaService {
 
     List<TarefaResponseDto> listarTarefas();
 
-    Tarefa atualizarTarefa(TarefaRequestDto dto);
+    Tarefa atualizarTarefa(Long id, TarefaRequestDto dto);
 
     void excluirTarefa(Long id);
 }
