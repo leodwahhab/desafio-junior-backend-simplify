@@ -7,7 +7,7 @@ import com.example.desafiojuniorbackendsimplify.model.Tarefa;
 import java.util.List;
 
 public interface TarefaService {
-    Tarefa criarTarefa(TarefaRequestDto dto);
+    TarefaResponseDto criarTarefa(TarefaRequestDto dto);
 
     List<TarefaResponseDto> listarTarefas();
 

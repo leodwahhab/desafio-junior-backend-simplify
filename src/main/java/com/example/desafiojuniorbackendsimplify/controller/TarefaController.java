@@ -4,10 +4,7 @@ import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaRequestDto;
 import com.example.desafiojuniorbackendsimplify.service.TarefaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tarefa")
@@ -21,5 +18,10 @@ public class TarefaController {
     @PostMapping
     public ResponseEntity<?> criarTarefa(@RequestBody TarefaRequestDto tarefaRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tarefaService.criarTarefa(tarefaRequestDto));
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> getTarefas() {
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaService.listarTarefas());
     }
 }

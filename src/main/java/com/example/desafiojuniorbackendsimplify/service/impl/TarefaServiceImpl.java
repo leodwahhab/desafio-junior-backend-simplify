@@ -22,17 +22,17 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     @Override
-    public Tarefa criarTarefa(TarefaRequestDto dto) {
+    public TarefaResponseDto criarTarefa(TarefaRequestDto dto) {
         Tarefa tarefa = tarefaMapper.toTarefa(dto);
 
         // TODO verificar se tarefa já existe (tornar nome único OU (nome + realizado = false) único)
 
-        return tarefaRepository.save(tarefa);
+        return tarefaMapper.toDto(tarefaRepository.save(tarefa));
     }
 
     @Override
     public List<TarefaResponseDto> listarTarefas() {
-        return List.of();
+        return tarefaMapper.toDtoLista(tarefaRepository.findAll());
     }
 
     @Override
