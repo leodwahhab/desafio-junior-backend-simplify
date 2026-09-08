@@ -26,6 +26,7 @@ public class TarefaContants {
             .prioridade(PrioridadeEnum.MEDIA)
             .build();
 
-//    public static final Tarefa TAREFA_VALIDO = new TarefaMapper().toTarefa(REQUEST_VALIDO);
-//    public static final Tarefa TAREFA_VALIDO = new TarefaMapper().toTarefa(REQUEST_VALIDO);
+    public static final TarefaRequestDto REQUEST_BLANK = new TarefaRequestDto("", "", false, PrioridadeEnum.MEDIA);
+    public static final TarefaRequestDto REQUEST_NULL = new TarefaRequestDto(null, null, false, null);
+
 }

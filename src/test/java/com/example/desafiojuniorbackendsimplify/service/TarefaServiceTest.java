@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static com.example.desafiojuniorbackendsimplify.constants.TarefaContants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,8 +42,10 @@ public class TarefaServiceTest {
         when(tarefaRepository.save(any(Tarefa.class))).thenReturn(TAREFA_VALIDO);
 
         TarefaResponseDto sut = tarefaService.criarTarefa(REQUEST_VALIDO);
+        TarefaResponseDto sutDescricaoRealizadoNulos = tarefaService.criarTarefa(REQUEST_VALIDO_CAMPOS_NULOS);
 
         assertThat(sut).isEqualTo(RESPONSE_VALIDO);
+        assertThat(sutDescricaoRealizadoNulos).isEqualTo(RESPONSE_VALIDO);
     }
 
     @Test
@@ -54,6 +57,10 @@ public class TarefaServiceTest {
 
     @Test
     public void criarTarefa_ComDadosInvalidos_LancaExcecao() {
+        when(tarefaRepository.save(any(Tarefa.class))).thenThrow(DataIntegrityViolationException.class);
 
+        assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_BLANK));
     }
+
+
 }
