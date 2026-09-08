@@ -21,4 +21,9 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<?> handleConflict(DataIntegrityViolationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Campo(s) inválido(s)!");
     }
+
+    @ExceptionHandler(TarefaJaExistenteException.class)
+    private ResponseEntity<?> handleConflict(TarefaJaExistenteException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
 }

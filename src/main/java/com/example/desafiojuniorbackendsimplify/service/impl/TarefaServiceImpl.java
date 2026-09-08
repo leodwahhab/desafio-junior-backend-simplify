@@ -2,6 +2,7 @@ package com.example.desafiojuniorbackendsimplify.service.impl;
 
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaRequestDto;
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaResponseDto;
+import com.example.desafiojuniorbackendsimplify.exception.TarefaJaExistenteException;
 import com.example.desafiojuniorbackendsimplify.mapper.TarefaMapper;
 import com.example.desafiojuniorbackendsimplify.model.Tarefa;
 import com.example.desafiojuniorbackendsimplify.repository.TarefaRepository;
@@ -24,9 +25,11 @@ public class TarefaServiceImpl implements TarefaService {
 
     @Override
     public TarefaResponseDto criarTarefa(TarefaRequestDto dto) {
-        Tarefa tarefa = tarefaMapper.toTarefa(dto);
+        if(tarefaRepository.existsByNomeAndRealizadoFalse(dto.nome())){
+            throw new TarefaJaExistenteException();
+        }
 
-        // TODO verificar se tarefa já existe (tornar nome único OU (nome + realizado = false) único)
+        Tarefa tarefa = tarefaMapper.toTarefa(dto);
 
         return tarefaMapper.toDto(tarefaRepository.save(tarefa));
     }
@@ -40,10 +43,7 @@ public class TarefaServiceImpl implements TarefaService {
     public Tarefa atualizarTarefa(Long id, TarefaRequestDto dto) {
         Tarefa tarefa = findTarefaExistentePorId(id);
 
-        tarefa.setNome(dto.nome());
-        tarefa.setDescricao(dto.descricao());
-        tarefa.setPrioridade(dto.prioridade());
-        tarefa.setRealizado(dto.realizado());
+        tarefa = tarefaMapper.toTarefa(dto);
 
         return tarefaRepository.save(tarefa);
     }
