@@ -1,6 +1,5 @@
 package com.example.desafiojuniorbackendsimplify.service;
 
-import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaRequestDto;
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaResponseDto;
 import com.example.desafiojuniorbackendsimplify.exception.TarefaJaExistenteException;
 import com.example.desafiojuniorbackendsimplify.mapper.TarefaMapper;
@@ -17,8 +16,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import static com.example.desafiojuniorbackendsimplify.constants.TarefaContants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -49,7 +46,7 @@ public class TarefaServiceTest {
     }
 
     @Test
-    public void criarTarefa_JaExistente_LancaExcecao() {
+    public void criarTarefa_JaExistenteNaoRealizada_LancaExcecao() {
         when(tarefaRepository.existsByNomeAndRealizadoFalse(REQUEST_VALIDO.nome())).thenReturn(true);
 
         assertThrows(TarefaJaExistenteException.class, () -> tarefaService.criarTarefa(REQUEST_VALIDO));
@@ -59,8 +56,8 @@ public class TarefaServiceTest {
     public void criarTarefa_ComDadosInvalidos_LancaExcecao() {
         when(tarefaRepository.save(any(Tarefa.class))).thenThrow(DataIntegrityViolationException.class);
 
+        assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_EMPTY));
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_BLANK));
+        assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_NULL));
     }
-
-
 }
