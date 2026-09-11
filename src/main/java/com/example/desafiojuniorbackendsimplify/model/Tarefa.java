@@ -2,6 +2,7 @@ package com.example.desafiojuniorbackendsimplify.model;
 
 import com.example.desafiojuniorbackendsimplify.enums.PrioridadeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -16,6 +17,8 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
@@ -24,6 +27,7 @@ public class Tarefa {
     @Column(nullable = false)
     private boolean realizado = false;
 
+    @NonNull
     @Column(nullable = false)
     private PrioridadeEnum prioridade;
 }

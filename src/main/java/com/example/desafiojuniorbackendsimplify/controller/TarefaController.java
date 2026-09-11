@@ -1,6 +1,7 @@
 package com.example.desafiojuniorbackendsimplify.controller;
 
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaRequestDto;
+import com.example.desafiojuniorbackendsimplify.enums.PrioridadeEnum;
 import com.example.desafiojuniorbackendsimplify.service.TarefaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,12 @@ public class TarefaController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getTarefas() {
-        return ResponseEntity.status(HttpStatus.OK).body(tarefaService.listarTarefas());
+    public ResponseEntity<?> getTarefas(@RequestParam(required = false) String nome,
+                                        @RequestParam(required = false) String descricao,
+                                        @RequestParam(required = false) Boolean realizado,
+                                        @RequestParam(required = false) PrioridadeEnum prioridade) {
+        TarefaRequestDto requestDto = new TarefaRequestDto(nome, descricao, realizado, prioridade);
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaService.listarTarefas(requestDto));
     }
 
     @PutMapping("/{id}")

@@ -2,11 +2,15 @@ package com.example.desafiojuniorbackendsimplify.service.impl;
 
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaRequestDto;
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaResponseDto;
+import com.example.desafiojuniorbackendsimplify.enums.PrioridadeEnum;
 import com.example.desafiojuniorbackendsimplify.exception.TarefaJaExistenteException;
 import com.example.desafiojuniorbackendsimplify.mapper.TarefaMapper;
 import com.example.desafiojuniorbackendsimplify.model.Tarefa;
 import com.example.desafiojuniorbackendsimplify.repository.TarefaRepository;
+import com.example.desafiojuniorbackendsimplify.repository.specification.TarefaSpecification;
 import com.example.desafiojuniorbackendsimplify.service.TarefaService;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,16 +39,32 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     @Override
-    public List<TarefaResponseDto> listarTarefas() {
-        return tarefaMapper.toDtoLista(tarefaRepository.findAll());
+    public List<TarefaResponseDto> listarTarefas(TarefaRequestDto dto) {
+        Specification<Tarefa> specification = Specification.unrestricted();
+
+        if(dto.nome() != null && !dto.nome().isBlank()) {
+            specification = specification.and(TarefaSpecification.nomeContem(dto.nome()));
+        }
+
+        if(dto.descricao() != null && !dto.descricao().isBlank()) {
+            specification = specification.and(TarefaSpecification.descricaoContem(dto.descricao()));
+        }
+
+        if(dto.realizado() != null) {
+            specification = specification.and(TarefaSpecification.porRealizado(dto.realizado()));
+        }
+
+        if ((dto.prioridade() != null)) {
+            specification = specification.and(TarefaSpecification.porPrioridade(dto.prioridade()));
+        }
+
+        return tarefaMapper.toDtoLista(tarefaRepository.findAll(specification));
     }
 
     @Override
     public Tarefa atualizarTarefa(Long id, TarefaRequestDto dto) {
-        Tarefa tarefa = findTarefaExistentePorId(id);
-
-        tarefa = tarefaMapper.toTarefa(dto);
-
+        Tarefa tarefa = tarefaMapper.toTarefa(dto);
+        tarefa.setId(id);
         return tarefaRepository.save(tarefa);
     }
 

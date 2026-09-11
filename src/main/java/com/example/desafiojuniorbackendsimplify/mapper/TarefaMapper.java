@@ -6,6 +6,7 @@ import com.example.desafiojuniorbackendsimplify.model.Tarefa;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class TarefaMapper {
@@ -27,7 +28,7 @@ public class TarefaMapper {
         return Tarefa.builder()
                 .nome(dto.nome())
                 .descricao(dto.descricao())
-                .realizado(dto.realizado())
+                .realizado(Objects.nonNull(dto.realizado()) && dto.realizado())
                 .prioridade(dto.prioridade())
                 .build();
     }
