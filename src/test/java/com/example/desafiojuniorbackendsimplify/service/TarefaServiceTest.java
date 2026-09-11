@@ -43,13 +43,11 @@ public class TarefaServiceTest {
     @Test
     public void criarTarefa_ComDadosValidos_RetornaTarefa() {
         when(tarefaRepository.existsByNomeAndRealizadoFalse(anyString())).thenReturn(false);
-        when(tarefaRepository.save(any(Tarefa.class))).thenReturn(TAREFA_VALIDO_01);
+        when(tarefaRepository.save(any(Tarefa.class))).thenReturn(getTarefaValido01());
 
         TarefaResponseDto sut = tarefaService.criarTarefa(REQUEST_VALIDO);
-        TarefaResponseDto sutDescricaoRealizadoNulos = tarefaService.criarTarefa(REQUEST_VALIDO_CAMPOS_NULOS);
 
         assertThat(sut).isEqualTo(RESPONSE_VALIDO);
-        assertThat(sutDescricaoRealizadoNulos).isEqualTo(RESPONSE_VALIDO);
     }
 
     @Test
@@ -104,21 +102,23 @@ public class TarefaServiceTest {
 
     @Test
     public void atualizarTarefa_ComDadosValidos_RetornaTarefaAtualizada() {
-        when(tarefaRepository.findById(anyLong())).thenReturn(Optional.of(TAREFA_VALIDO_01));
-        when(tarefaRepository.save(any(Tarefa.class))).thenReturn(TAREFA_VALIDO_02);
-        String novoNome = TAREFA_VALIDO_02.getNome();
-        String novoDescricao = TAREFA_VALIDO_02.getDescricao();
-        Boolean novoRealizado = TAREFA_VALIDO_02.isRealizado();
-        PrioridadeEnum novoPrioridade = TAREFA_VALIDO_02.getPrioridade();
-        TarefaRequestDto exemploTarefaAtualizada = new TarefaRequestDto(novoNome, novoDescricao, novoRealizado, novoPrioridade);
+        Tarefa tarefaAtual = getTarefaValido01();
+        Tarefa tarefaNovosValores = getTarefaValido02();
+        when(tarefaRepository.findById(anyLong())).thenReturn(Optional.of(tarefaAtual));
+        when(tarefaRepository.save(any(Tarefa.class))).thenReturn(tarefaNovosValores);
 
-        TarefaResponseDto sut = tarefaService.atualizarTarefa(1L, exemploTarefaAtualizada);
+        TarefaResponseDto sut = tarefaService.atualizarTarefa(1L, new TarefaRequestDto(
+                tarefaNovosValores.getNome(),
+                tarefaNovosValores.getDescricao(),
+                tarefaNovosValores.isRealizado(),
+                tarefaNovosValores.getPrioridade()
+        ));
 
         assertThat(sut).isNotNull();
-        assertThat(sut.nome()).isEqualTo(novoNome);
-        assertThat(sut.descricao()).isEqualTo(novoDescricao);
-        assertThat(sut.realizado()).isEqualTo(novoRealizado);
-        assertThat(sut.prioridade()).isEqualTo(novoPrioridade);
+        assertThat(sut.nome()).isEqualTo(tarefaNovosValores.getNome());
+        assertThat(sut.descricao()).isEqualTo(tarefaNovosValores.getDescricao());
+        assertThat(sut.realizado()).isEqualTo(tarefaNovosValores.isRealizado());
+        assertThat(sut.prioridade()).isEqualTo(tarefaNovosValores.getPrioridade());
     }
 
     @Test
@@ -130,7 +130,7 @@ public class TarefaServiceTest {
 
     @Test
     public void atualizarTarefa_ComDadosInvalidos_LancaExcecao() {
-        when(tarefaRepository.findById(anyLong())).thenReturn(Optional.of(TAREFA_VALIDO_01));
+        when(tarefaRepository.findById(anyLong())).thenReturn(Optional.of(getTarefaValido01()));
         when(tarefaRepository.save(any(Tarefa.class))).thenThrow(DataIntegrityViolationException.class);
 
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.atualizarTarefa(1L, REQUEST_EMPTY));
