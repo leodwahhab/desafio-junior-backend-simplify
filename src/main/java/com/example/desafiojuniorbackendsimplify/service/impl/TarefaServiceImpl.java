@@ -62,10 +62,10 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     @Override
-    public Tarefa atualizarTarefa(Long id, TarefaRequestDto dto) {
+    public TarefaResponseDto atualizarTarefa(Long id, TarefaRequestDto dto) {
         Tarefa tarefa = tarefaMapper.toTarefa(dto);
         tarefa.setId(id);
-        return tarefaRepository.save(tarefa);
+        return tarefaMapper.toDto(tarefaRepository.save(tarefa));
     }
 
     @Override
