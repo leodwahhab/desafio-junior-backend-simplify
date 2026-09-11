@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 public class TarefaServiceImpl implements TarefaService {
@@ -63,8 +64,12 @@ public class TarefaServiceImpl implements TarefaService {
 
     @Override
     public TarefaResponseDto atualizarTarefa(Long id, TarefaRequestDto dto) {
-        Tarefa tarefa = tarefaMapper.toTarefa(dto);
-        tarefa.setId(id);
+        Tarefa tarefa = findTarefaExistentePorId(id);
+        tarefa.setNome(dto.nome());
+        tarefa.setDescricao(dto.descricao());
+        tarefa.setRealizado(Objects.isNull(dto.realizado()) ? tarefa.isRealizado() : dto.realizado());
+        tarefa.setPrioridade(dto.prioridade());
+
         return tarefaMapper.toDto(tarefaRepository.save(tarefa));
     }
 
