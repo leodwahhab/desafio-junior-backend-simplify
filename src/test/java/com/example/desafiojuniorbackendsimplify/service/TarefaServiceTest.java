@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static com.example.desafiojuniorbackendsimplify.constants.TarefaContants.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
@@ -136,5 +137,19 @@ public class TarefaServiceTest {
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.atualizarTarefa(1L, REQUEST_EMPTY));
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.atualizarTarefa(1L, REQUEST_BLANK));
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.atualizarTarefa(1L, REQUEST_NULL));
+    }
+
+    @Test
+    public void removerTarefa_ComIdExistente_RemoveTarefa() {
+        when(tarefaRepository.findById(anyLong())).thenReturn(Optional.of(getTarefaValido01()));
+
+        assertThatCode(() -> tarefaService.excluirTarefa(1L)).doesNotThrowAnyException();
+    }
+
+    @Test
+    public void removerTarefa_ComIdNaoExistente_LancaExcecao() {
+        when(tarefaRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> tarefaService.excluirTarefa(1L));
     }
 }
