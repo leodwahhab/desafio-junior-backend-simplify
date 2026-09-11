@@ -23,13 +23,13 @@ public class TarefaRepositoryTest {
 
     @Test
     public void criarTarefa_ComDadosValidos_RetornaTarefa() {
-        Tarefa example = tarefaRepository.save(TAREFA_VALIDO);
+        Tarefa example = tarefaRepository.save(TAREFA_VALIDO_01);
         Tarefa sut = entityManager.find(Tarefa.class, example.getId());
 
         assertThat(sut).isNotNull();
-        assertThat(sut.getNome()).isEqualTo(TAREFA_VALIDO.getNome());
-        assertThat(sut.getDescricao()).isEqualTo(TAREFA_VALIDO.getDescricao());
-        assertThat(sut.getPrioridade()).isEqualTo(TAREFA_VALIDO.getPrioridade());
+        assertThat(sut.getNome()).isEqualTo(TAREFA_VALIDO_01.getNome());
+        assertThat(sut.getDescricao()).isEqualTo(TAREFA_VALIDO_01.getDescricao());
+        assertThat(sut.getPrioridade()).isEqualTo(TAREFA_VALIDO_01.getPrioridade());
     }
 
     @Test

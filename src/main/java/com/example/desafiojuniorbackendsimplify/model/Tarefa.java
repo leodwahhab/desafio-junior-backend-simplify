@@ -17,8 +17,6 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
-    @NotBlank
     @Column(nullable = false)
     private String nome;
 
@@ -27,7 +25,6 @@ public class Tarefa {
     @Column(nullable = false)
     private boolean realizado = false;
 
-    @NonNull
     @Column(nullable = false)
     private PrioridadeEnum prioridade;
 }

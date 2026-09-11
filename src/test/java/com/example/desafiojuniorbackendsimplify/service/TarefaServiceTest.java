@@ -1,5 +1,6 @@
 package com.example.desafiojuniorbackendsimplify.service;
 
+import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaRequestDto;
 import com.example.desafiojuniorbackendsimplify.controller.dto.TarefaResponseDto;
 import com.example.desafiojuniorbackendsimplify.exception.TarefaJaExistenteException;
 import com.example.desafiojuniorbackendsimplify.mapper.TarefaMapper;
@@ -13,10 +14,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 import static com.example.desafiojuniorbackendsimplify.constants.TarefaContants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -36,7 +41,7 @@ public class TarefaServiceTest {
     @Test
     public void criarTarefa_ComDadosValidos_RetornaTarefa() {
         when(tarefaRepository.existsByNomeAndRealizadoFalse(anyString())).thenReturn(false);
-        when(tarefaRepository.save(any(Tarefa.class))).thenReturn(TAREFA_VALIDO);
+        when(tarefaRepository.save(any(Tarefa.class))).thenReturn(TAREFA_VALIDO_01);
 
         TarefaResponseDto sut = tarefaService.criarTarefa(REQUEST_VALIDO);
         TarefaResponseDto sutDescricaoRealizadoNulos = tarefaService.criarTarefa(REQUEST_VALIDO_CAMPOS_NULOS);
@@ -59,5 +64,39 @@ public class TarefaServiceTest {
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_EMPTY));
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_BLANK));
         assertThrows(DataIntegrityViolationException.class, () -> tarefaService.criarTarefa(REQUEST_NULL));
+    }
+
+    @Test
+    public void listarTarefas_ComFiltroValido_RetornaTarefasFiltradas() {
+        when(tarefaRepository.findAll(any(Specification.class))).thenReturn(LISTA_TAREFAS_FILTRADA);
+
+        List<TarefaResponseDto> sut = tarefaService.listarTarefas(REQUEST_VALIDO);
+
+        assertThat(sut.isEmpty()).isFalse();
+        assertThat(sut.size()).isEqualTo(1);
+        assertThat(sut.getFirst().nome()).isEqualTo(REQUEST_VALIDO.nome());
+        assertThat(sut.getFirst().descricao()).isEqualTo(REQUEST_VALIDO.descricao());
+        assertThat(sut.getFirst().realizado()).isEqualTo(REQUEST_VALIDO.realizado());
+        assertThat(sut.getFirst().prioridade()).isEqualTo(REQUEST_VALIDO.prioridade());
+    }
+
+    @Test
+    public void listarTarefas_SemFiltro_RetornaTodasTarefas() {
+        when(tarefaRepository.findAll(any(Specification.class))).thenReturn(LISTA_TAREFAS);
+
+        List<TarefaResponseDto> sut = tarefaService.listarTarefas(REQUEST_NULL);
+
+        assertThat(sut.isEmpty()).isFalse();
+        assertThat(sut.size()).isEqualTo(3);
+        assertThat(sut.getFirst()).isEqualTo(RESPONSE_VALIDO);
+    }
+
+    @Test
+    public void listarTarefas_SemRegistros_RetornaListaVazia() {
+        when(tarefaRepository.findAll(any(Specification.class))).thenReturn(List.of());
+
+        List<TarefaResponseDto> sut = tarefaService.listarTarefas(REQUEST_VALIDO);
+
+        assertTrue(sut.isEmpty());
     }
 }
